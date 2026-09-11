@@ -222,50 +222,12 @@
   <script src="https://js.stripe.com/v3/"></script>
   
   <script>
-    // Animation de défilement (déjà présente dans ton code)
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
         document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
       });
     });
-
-    // --- NOUVEAU : Logique de paiement Stripe ---
-    // Remplace par ta vraie clé publique Stripe (commence par pk_live_ ou pk_test_)
-    const stripe = Stripe('pk_test_51UAmHGH4XNAZR4SV0RCt2AMmUV949MWejpOpdTkzhB7lnvHYs0CZfGnm2zkh0U6fucbATQ3WertapQw88hRjFos600tytneY33');
-    const checkoutButton = document.getElementById('checkout-button');
-
-    checkoutButton.addEventListener('click', function () {
-      // Désactiver le bouton pendant le chargement
-      checkoutButton.textContent = 'Chargement...';
-      checkoutButton.disabled = true;
-
-      // Appel à ton serveur pour créer une session de paiement
-      fetch('/create-checkout-session', {
-        method: 'POST',
-      })
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (session) {
-        // Redirection vers la page de paiement sécurisée de Stripe
-        return stripe.redirectToCheckout({ sessionId: session.id });
-      })
-      .then(function (result) {
-        if (result.error) {
-          alert(result.error.message);
-          checkoutButton.textContent = 'Commander maintenant';
-          checkoutButton.disabled = false;
-        }
-      })
-      .catch(function (error) {
-        console.error('Erreur:', error);
-        checkoutButton.textContent = 'Commander maintenant';
-        checkoutButton.disabled = false;
-      });
-    });
   </script>
-</body>
-</html>
 </body>
 </html>
